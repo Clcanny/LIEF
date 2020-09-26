@@ -2574,7 +2574,7 @@ LIEF::Binary::functions_t Binary::eh_frame_functions(void) const {
       int32_t size           = vs.read_dwarf_encoded(augmentation_data);
 
       // Create the function
-      Function f{static_cast<uint64_t>(initial_location)};
+      Function f{static_cast<uint64_t>(initial_location + this->imagebase())};
       f.size(size);
       functions.push_back(std::move(f));
       VLOG(VDEBUG) << "PC BEGIN/SIZE: " << std::hex << function_begin << " : " << size  << std::endl;
