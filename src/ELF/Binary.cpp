@@ -1323,7 +1323,8 @@ Section& Binary::extend(const Section& section, uint64_t size) {
   Section* section_to_extend = *it_section;
 
   uint64_t from_offset  = section_to_extend->offset() + section_to_extend->size();
-  uint64_t from_address = section_to_extend->virtual_address() + size;
+  uint64_t from_address = section_to_extend->virtual_address() + section_to_extend->size();
+  bool section_not_loaded = section_to_extend->virtual_address() == 0;
   uint64_t shift        = size;
 
   this->datahandler_->make_hole(
@@ -1352,6 +1353,10 @@ Section& Binary::extend(const Section& section, uint64_t size) {
 
 
   this->header().section_headers_offset(this->header().section_headers_offset() + shift);
+
+  if (section_not_loaded) {
+    return *section_to_extend;
+  }
 
   this->shift_dynamic_entries(from_address, shift);
   this->shift_symbols(from_address, shift);
