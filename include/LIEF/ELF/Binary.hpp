@@ -313,7 +313,7 @@ class LIEF_API Binary : public LIEF::Binary {
   Section& extend(const Section& section, uint64_t size);
 
   //! @brief Add a static symbol
-  Symbol& add_static_symbol(const Symbol& symbol);
+  Symbol& add_static_symbol(const Symbol& symbol, bool smart_mode = false);
 
   //! @brief Add a dynamic symbol with the associated SymbolVersion
   Symbol& add_dynamic_symbol(const Symbol& symbol, const SymbolVersion* version = nullptr);

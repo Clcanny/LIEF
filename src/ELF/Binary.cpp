@@ -1601,9 +1601,18 @@ void Binary::strip(void) {
 }
 
 
-Symbol& Binary::add_static_symbol(const Symbol& symbol) {
-  this->static_symbols_.push_back(new Symbol{symbol});
-  return *(this->static_symbols_.back());
+Symbol& Binary::add_static_symbol(const Symbol& symbol, bool smart_mode) {
+  if (!smart_mode || symbol.is_exported()) {
+    this->static_symbols_.push_back(new Symbol{symbol});
+    return *(this->static_symbols_.back());
+  }
+  Section& section = this->static_symbols_section();
+  uint32_t first_exported_symbol_id = section.information();
+  auto it = this->static_symbols_.insert(this->static_symbols_.begin() +
+                                             first_exported_symbol_id,
+                                         new Symbol{symbol});
+  section.information(first_exported_symbol_id + 1);
+  return **it;
 }
 
 
