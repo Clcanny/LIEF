@@ -389,6 +389,9 @@ class LIEF_API Binary : public LIEF::Binary {
   //! section table
   virtual void remove_section(const std::string& name, bool clear = false) override;
 
+  //! @brief Sort a binary's static symbol table.
+  void sort_static_symbols(void);
+
   //! @brief Reconstruct the binary object and write it in `filename`
   //! @param filename Path to write the reconstructed binary
   virtual void write(const std::string& filename) override;

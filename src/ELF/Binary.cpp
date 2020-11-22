@@ -1675,6 +1675,20 @@ void Binary::interpreter(const std::string& interpreter) {
 }
 
 
+void Binary::sort_static_symbols(void) {
+  std::stable_sort(this->static_symbols_.begin(),
+                   this->static_symbols_.end(),
+                   [](const Symbol* a, const Symbol* b) {
+                     if (a->binding() == SYMBOL_BINDINGS::STB_LOCAL &&
+                         (b->binding() == SYMBOL_BINDINGS::STB_GLOBAL ||
+                          b->binding() == SYMBOL_BINDINGS::STB_WEAK)) {
+                       return true;
+                     }
+                     return false;
+                   });
+}
+
+
 void Binary::write(const std::string& filename) {
   Builder builder{this};
   builder.build();
