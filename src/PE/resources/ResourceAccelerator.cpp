@@ -76,8 +76,8 @@ std::set<ACCELERATOR_FLAGS> ResourceAccelerator::flags_list(void) const {
 
   const auto flags_tmp = flags_;
   std::copy_if(
-    std::cbegin(accelerator_array),
-    std::cend(accelerator_array),
+    std::begin(accelerator_array),
+    std::end(accelerator_array),
     std::inserter(flags_set, std::begin(flags_set)),
     [flags_tmp](ACCELERATOR_FLAGS c) {
       return (static_cast<uint16_t>(flags_tmp) & static_cast<uint16_t>(c)) > 0;
