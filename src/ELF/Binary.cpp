@@ -1679,7 +1679,8 @@ void Binary::sort_static_symbols(void) {
   std::stable_sort(this->static_symbols_.begin(),
                    this->static_symbols_.end(),
                    [](const Symbol* a, const Symbol* b) {
-                     if (a->binding() == SYMBOL_BINDINGS::STB_LOCAL &&
+                     if ((a->binding() == SYMBOL_BINDINGS::STB_LOCAL ||
+                          a->type() == ELF_SYMBOL_TYPES::STT_FILE) &&
                          (b->binding() == SYMBOL_BINDINGS::STB_GLOBAL ||
                           b->binding() == SYMBOL_BINDINGS::STB_WEAK)) {
                        return true;
