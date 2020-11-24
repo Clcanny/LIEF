@@ -1360,7 +1360,7 @@ Section& Binary::extend(const Section& section, uint64_t size) {
     if ((segment->file_offset() + segment->physical_size()) >= from_offset and
         from_offset >= segment->file_offset()) {
       if (section_loaded) {
-        segment->virtual_size(segment->virtual_size()   + shift);
+        segment->virtual_size(segment->virtual_size() + shift);
       }
       segment->physical_size(segment->physical_size() + shift);
     }
