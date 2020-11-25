@@ -491,6 +491,24 @@ void Builder::build_static_symbols(void) {
   //clear
   //symbol_section.content(std::vector<uint8_t>(symbol_section.content().size(), 0));
 
+  auto it_begin = std::begin(this->binary_->static_symbols_);
+  auto it_end = std::end(this->binary_->static_symbols_);
+  std::stable_sort(it_begin, it_end, [](const Symbol* lhs, const Symbol* rhs) {
+    if (lhs->binding() == SYMBOL_BINDINGS::STB_LOCAL &&
+        (rhs->binding() == SYMBOL_BINDINGS::STB_GLOBAL ||
+         rhs->binding() == SYMBOL_BINDINGS::STB_WEAK)) {
+      return true;
+    }
+    return false;
+  });
+  auto it_first_exported_symbol =
+      std::find_if(it_begin, it_end, [](const Symbol* sym) {
+        return sym->binding() == SYMBOL_BINDINGS::STB_GLOBAL ||
+               sym->binding() == SYMBOL_BINDINGS::STB_WEAK;
+      });
+  assert(it_first_exported_symbol != it_end);
+  symbol_section.information(std::distance(it_begin, it_first_exported_symbol));
+
   if (symbol_section.link() == 0 or
       symbol_section.link() >= this->binary_->sections_.size()) {
     throw LIEF::not_found("Unable to find a string section associated \
