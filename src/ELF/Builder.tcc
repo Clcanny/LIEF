@@ -506,8 +506,14 @@ void Builder::build_static_symbols(void) {
         return sym->binding() == SYMBOL_BINDINGS::STB_GLOBAL ||
                sym->binding() == SYMBOL_BINDINGS::STB_WEAK;
       });
-  assert(it_first_exported_symbol != it_end);
-  symbol_section.information(std::distance(it_begin, it_first_exported_symbol));
+  uint32_t first_exported_symbol_index =
+      static_cast<uint32_t>(std::distance(it_begin, it_first_exported_symbol));
+  if (first_exported_symbol_index != symbol_section.information()) {
+    LIEF_WARN("information of .symtab section changes from {:d} to {:d}",
+              symbol_section.information(),
+              first_exported_symbol_index);
+    symbol_section.information(first_exported_symbol_index);
+  }
 
   if (symbol_section.link() == 0 or
       symbol_section.link() >= this->binary_->sections_.size()) {
