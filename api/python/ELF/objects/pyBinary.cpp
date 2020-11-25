@@ -288,7 +288,7 @@ void create<Binary>(py::module& m) {
     .def("add_static_symbol",
         &Binary::add_static_symbol,
         "Add a **static** " RST_CLASS_REF(lief.ELF.Symbol) " to the binary",
-        "symbol"_a, "smart_mode"_a = false,
+        "symbol"_a,
         py::return_value_policy::reference)
 
     .def("add_dynamic_symbol",

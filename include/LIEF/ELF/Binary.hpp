@@ -313,7 +313,7 @@ class LIEF_API Binary : public LIEF::Binary {
   Section& extend(const Section& section, uint64_t size);
 
   //! @brief Add a static symbol
-  Symbol& add_static_symbol(const Symbol& symbol, bool smart_mode = false);
+  Symbol& add_static_symbol(const Symbol& symbol);
 
   //! @brief Add a dynamic symbol with the associated SymbolVersion
   Symbol& add_dynamic_symbol(const Symbol& symbol, const SymbolVersion* version = nullptr);
@@ -388,9 +388,6 @@ class LIEF_API Binary : public LIEF::Binary {
   //! We clear data used by this section and it's removed from
   //! section table
   virtual void remove_section(const std::string& name, bool clear = false) override;
-
-  //! @brief Sort a binary's static symbol table.
-  void sort_static_symbols(void);
 
   //! @brief Reconstruct the binary object and write it in `filename`
   //! @param filename Path to write the reconstructed binary

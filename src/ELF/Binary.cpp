@@ -1601,18 +1601,9 @@ void Binary::strip(void) {
 }
 
 
-Symbol& Binary::add_static_symbol(const Symbol& symbol, bool smart_mode) {
-  if (!smart_mode || symbol.is_exported()) {
-    this->static_symbols_.push_back(new Symbol{symbol});
-    return *(this->static_symbols_.back());
-  }
-  Section& section = this->static_symbols_section();
-  uint32_t first_exported_symbol_id = section.information();
-  auto it = this->static_symbols_.insert(this->static_symbols_.begin() +
-                                             first_exported_symbol_id,
-                                         new Symbol{symbol});
-  section.information(first_exported_symbol_id + 1);
-  return **it;
+Symbol& Binary::add_static_symbol(const Symbol& symbol) {
+  this->static_symbols_.push_back(new Symbol{symbol});
+  return *(this->static_symbols_.back());
 }
 
 
@@ -1681,21 +1672,6 @@ const std::string& Binary::interpreter(void) const {
 
 void Binary::interpreter(const std::string& interpreter) {
   this->interpreter_ = interpreter;
-}
-
-
-void Binary::sort_static_symbols(void) {
-  std::stable_sort(this->static_symbols_.begin(),
-                   this->static_symbols_.end(),
-                   [](const Symbol* a, const Symbol* b) {
-                     if ((a->binding() == SYMBOL_BINDINGS::STB_LOCAL ||
-                          a->type() == ELF_SYMBOL_TYPES::STT_FILE) &&
-                         (b->binding() == SYMBOL_BINDINGS::STB_GLOBAL ||
-                          b->binding() == SYMBOL_BINDINGS::STB_WEAK)) {
-                       return true;
-                     }
-                     return false;
-                   });
 }
 
 
