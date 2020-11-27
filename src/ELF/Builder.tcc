@@ -547,7 +547,7 @@ void Builder::build_static_symbols(void) {
   if (symbol_str_section.size() > string_table_raw.size()) {
     string_table_raw.resize(symbol_str_section.size(), 0);
   } else if (symbol_str_section.size() < string_table_raw.size()) {
-    // FIXME: Handle increase of size in symbol_str_section
+    // FIXME: Handle increase of size in symbol_str_section automatically
     LIEF_WARN("Size of string table is increased by {:d} after optimization, "
               "please extend string table after adding static symbols",
               string_table_raw.size() - symbol_str_section.size());
