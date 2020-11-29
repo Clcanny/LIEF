@@ -564,6 +564,15 @@ void Builder::build_static_symbols(void) {
 
   // FIXME: Handle increase of size in symbol_str_section
   symbol_str_section.content(std::move(string_table_raw));
+
+  if (symbol_section.size() > content.raw().size()) {
+    content.raw().resize(symbol_section.size(), 0);
+  } else if (symbol_section.size() < content.raw().size()) {
+    LIEF_WARN(
+        "Size of static symbol table is increased by {:d} after building, "
+        "please extend static symbol table after adding static symbols",
+        content.raw().size() - symbol_section.size());
+  }
   symbol_section.content(std::move(content.raw()));
 
 }
