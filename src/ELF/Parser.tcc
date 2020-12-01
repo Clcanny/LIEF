@@ -199,6 +199,16 @@ void Parser::parse_binary(void) {
 
   }
 
+  // Parse .rel.plt/.rela.plt Relocations
+  // ====================================
+  auto&& it_relplt_section = std::find_if(
+      std::begin(this->binary_->sections_),
+      std::end(this->binary_->sections_)
+      [] (const Section* section)
+      {
+        return section != nullptr && section->type() == ELF_SECTION_TYPES::
+      });
+
   // Parse PLT/GOT Relocations
   // ==========================
   auto&& it_pltgot_relocations = std::find_if(
