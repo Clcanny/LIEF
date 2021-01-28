@@ -207,6 +207,10 @@ class LIEF_API Binary : public LIEF::Binary {
   //! Check if a section that handle the given virtual address exists
   bool has_section_with_va(uint64_t va) const;
 
+  //! Return Section that handle the given virtual address
+  Section&       get_section_with_va(uint64_t va);
+  const Section& get_section_with_va(uint64_t va) const;
+
   //! Return Section with the given `name`
   Section&       get_section(const std::string& name);
   const Section& get_section(const std::string& name) const;

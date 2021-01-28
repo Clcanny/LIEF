@@ -1590,6 +1590,31 @@ bool Binary::has_section_with_va(uint64_t va) const {
   return it_section != this->sections_.cend();
 }
 
+Section& Binary::get_section_with_va(uint64_t va) {
+    return const_cast<Section&>(
+        static_cast<const Binary*>(this)->get_section_with_va(va));
+}
+
+const Section& Binary::get_section_with_va(uint64_t va) const {
+    auto&& it_section = std::find_if(
+        this->sections_.cbegin(),
+        this->sections_.cend(),
+        [va](const Section* section) {
+            if (section == nullptr) {
+                return false;
+            }
+            return ((section->virtual_address() <= va) and
+                    (section->virtual_address() + section->size()) > va);
+        });
+
+    if (it_section == this->sections_.cend()) {
+        std::stringstream adr_str;
+        adr_str << "0x" << std::hex << va;
+        throw not_found("Unable to find section with virtual address " + va);
+    }
+    return **it_section;
+}
+
 void Binary::strip(void) {
   this->static_symbols_ = {};
 
