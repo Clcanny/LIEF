@@ -1640,7 +1640,7 @@ void Builder::build_pltgot_relocations(void) {
   }
 
 
-  if (content.size() > relocation_section.original_size() and relocation_section.original_size() > 0) {
+  if (content.size() > relocation_section.size() and relocation_section.size() > 0) {
     // Need relocation of the reloc section
     Segment relocation_load;
     relocation_load.type(SEGMENT_TYPES::PT_LOAD);
