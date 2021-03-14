@@ -702,7 +702,7 @@ void Builder::build_dynamic_section(void) {
           const size_t array_size = array.size() * sizeof(Elf_Addr);
 
 
-          if (array_section.original_size() < array_size and array_section.original_size() > 0) {
+          if (array_section.size() < array_size and array_section.size() > 0) {
             this->relocate_dynamic_array<ELF_T>(*dynamic_cast<DynamicEntryArray*>(entry), *dt_array_size);
             return build_dynamic_section<ELF_T>();
           }
@@ -714,7 +714,12 @@ void Builder::build_dynamic_section(void) {
             raw_array[i] = static_cast<Elf_Addr>(array[i]);
           }
 
-          dt_array_size->value((array.size()) * sizeof(Elf_Addr));
+          if (dt_array_size->value() != array_size) {
+            LIEF_DEBUG("Size of dynamic entry {} changes from 0x{:x} to 0x{:x}",
+                       dt_array_size->tag(), dt_array_size->value(),
+                       array_size);
+          }
+          dt_array_size->value(array_size);
           array_section.content(array_content);
           break;
         }
